@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <script src="../js/default.js" type="text/javascript"></script>
+	
+<style>
+input {
+	background-color: darkgreen;
+}
+
+input#ep {
+    background: darkkhaki;
+}
+
+#bar:after {
+	content: "“ 行见梅花腊底， 忽逢元旦新正。 不觉艳杏盈枝， 又早新荷贴水。”";
+	color: dimgray;
+	font-size: 80%;
+	padding-left: 10px;
+}
+
+#link{
+	font-size: 24px;
+	position:fixed;
+	top:100px;
+	opacity:0
+}
+
+#link a {
+	font-family: serif;
+}
+
+#reader {
+	display:none;
+    position: fixed;
+    top: 33px;
+    right: 0;
+    width: 40%;
+	height:calc(85% - 200px);
+    padding-left: 20px;
+}
+
+textarea {
+    padding: 10px;
+    color: dimgray;
+    font-size: 150%;
+    background-color: #181818;
+    width: 95%;
+    height: 90%;
+    line-height: 1.5;
+}
+
+textarea:focus{
+    outline: 0;
+}
+
+.processDiv {
+	position:fixed;
+	top:30px;
+	left:0;
+	width: 100%;
+}
+
+#processBar {
+	height: 2px;
+	background: dimgray;
+	width: 0%;
+}
+::-webkit-scrollbar {
+	width: 4px!important;
+}
+
+::-webkit-scrollbar-thumb:not(textarea) {
+	background-color: sienna!important;
+}
+</style>
+
+  </head>
+<body><span id="time-stamp">20221123205608</span>
+	<pre></pre>
+	<div id="link">
+		<a href="https://www.inoreader.com/" target="_blank">Inoreader</a>&nbsp;&nbsp;
+		<a href="https://www.youtube.com/" target="_blank">YouTube</a>&nbsp;&nbsp;
+		<a href="https://earth.google.com/" target="_blank">Earth</a>&nbsp;&nbsp;
+		<a href="https://www.windy.com/" target="_blank">Windy</a>&nbsp;&nbsp;
+		<a href="https://keep.google.com/" target="_blank">Keep</a>&nbsp;&nbsp;
+		<a href="https://mail.google.com/?ui=html" target="_blank">Gmail</a>&nbsp;&nbsp;
+		<a href="https://drive.google.com/" target="_blank">Drive</a>&nbsp;&nbsp;
+		<input onclick="$i('reader').style.display='block';$i('link').style.display='none';top.postMessage(`gallery_hide_right`, `*`)" type='button' value=' Reader '/><br><br>
+		</div>
+	<div id="reader">
+		<br><br>
+		<input style="display:none" id='file-input' name='file-input' type='file'/>
+		<input onclick="$i('file-input').click()" type='button' value=' TXT-file '/> 
+		<input onclick='pdf()' type='button' value=' PDF-file '/>
+		<br><br>
+		<div class="processDiv"><div id="processBar"></div></div>
+		<textarea onfocus='select()' title="拼接的高亮片断"></textarea><br>
+		<input onclick='ep()' id="ep" type='button' value=' 清除前次摘记 '/>
+	</div>
+</body>
+
+<script type='text/javascript'>
+/*------------------------------+
+	简化
+-------------------------------*/
+function $i(x) {
+	return document.getElementById(x)
+}
+function $c(x) {
+	return document.getElementsByClassName(x)
+}
+function $t(x) {
+	return document.getElementsByTagName(x)
+}
+
+
+/*------------------------------+
+	阅读器
+-------------------------------*/
+mouseXPosition = 0;
+temp = "";
+flag= false;
+
+function readSingleFile(e) {
+	var file = e.target.files[0];
+	var filename = e.target.files[0].name;
+	if (!file) {
+		return;
+	}
+	$i("bar").innerHTML = filename;
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		temp = "";
+		flag = false;
+		$t("pre")[0].innerHTML = e.target.result;
+		$t("pre")[0].style.width = "50%";
+		var a = localStorage.getItem("【Exc】:     "+$i("bar").innerHTML);	
+		document.documentElement.scrollTop = localStorage.getItem("【Pos】:     "+filename);
+		$t("textarea")[0].value = a;	
+		$t("textarea")[0].scrollTop = $t("textarea")[0].scrollHeight;
+		if(!flag && a!=null && a!=""){
+			temp = a + "\n\r";
+			flag = true;
+		}
+	};
+	reader.readAsText(file, 'gb2312');
+}
+
+function getPageYOffset() {
+	return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+};
+
+if (window.addEventListener)//FF
+    window.addEventListener('DOMMouseScroll', wheel, false);
+window.onmousewheel = document.onmousewheel = wheel;//W3C
+function wheel(event){
+    var delta = 0;
+    if (!event) event = window.event;
+    if (event.wheelDelta) {//IE、chrome
+        delta = event.wheelDelta/120; 
+        if (window.opera) delta = -delta;
+    } else if (event.detail) {//FF
+        delta = -event.detail/3;
+    }
+    if (delta!=0 && $i("bar").innerHTML!="")
+		localStorage.setItem("【Pos】:     "+$i("bar").innerHTML, getPageYOffset());
+}
+
+function pdf() {
+	top.postMessage("hide_right", "*")
+	window.open("../ex/pdf/web/viewer.html", '_self');
+}
+
+function excerptSelection(){
+	var selection;
+	if (window.getSelection)
+		selection = window.getSelection();
+	else if (typeof document.selection != "undefined")
+		selection = document.selection;
+	var range = selection.getRangeAt(0);
+	if (range && !selection.isCollapsed) {
+		if (selection.anchorNode.parentNode == selection.focusNode.parentNode) {
+			var i_tag = document.createElement('i');
+			i_tag.className = 'excerpt';
+			i_tag.textContent = selection.toString();
+			selection.deleteFromDocument();
+			range.insertNode(i_tag);
+		}
+	}
+}
+
+function Excerpt(){
+  	var array = [];
+    var elements = $t("i");
+	var title = $i("bar").innerHTML;
+    for(var i = 0; i < elements.length; i++) {
+       var current = elements[i];
+        if(current.children.length === 0 && current.textContent.replace(/ |\n/g,'') !== '') {
+           // Check the element has no children && that it is not empty
+           array.push(current.textContent);
+        }
+    } 
+	localStorage.setItem("【Exc】:     "+title, temp + array.join("\n\r\n\r"));
+	$t("textarea")[0].value = localStorage.getItem("【Exc】:     "+title);
+	$t("textarea")[0].scrollTop = $t("textarea")[0].scrollHeight;
+}
+
+function ep(){
+  	localStorage.removeItem("【Exc】:     "+$i("bar").innerHTML);
+	temp = "";
+	Excerpt()
+}
+
+function onKeyDown(e) {
+	console.log(e.keyCode)
+	if (e.keyCode != 9) return // only allow TAB key
+	e.preventDefault(); // prevent default behaviour, which is "blur"
+
+	var sel = document.getSelection(),
+		range = sel.getRangeAt(0),
+		tabNodeValue = '\u0009', // tab; with 4 spaces use: Array(4).join('\u00a0')
+		tabNode = document.createTextNode(tabNodeValue);
+
+	range.insertNode(tabNode)
+	range.setStartAfter(tabNode)
+	range.setEndAfter(tabNode)
+}    
+
+
+/*------------------------------+
+	标题栏
+-------------------------------*/
+window.onload = function() {
+	if (document.getElementById('time-stamp')) {
+		var x = document.getElementById('time-stamp').innerHTML;
+		if (x.length == 14) {
+			var y = x.substring(0, 4);
+			var m = x.substring(4, 6);
+			var d = x.substring(6, 8);
+			var h = x.substring(8, 10);
+			var mi = x.substring(10, 12);
+			var s = x.substring(12, 14);
+			var wArr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
+			time_stamp = 'Last updated on ' + y + '-' + m + '-' + d + ' ' + h + ':' + mi + ':' + s + '  ' + wArr[new Date(parseInt(y) + '-' + parseInt(m) + '-' + parseInt(d)).getDay()];
+		}
+	}
+
+	$i('file-input').addEventListener('change', readSingleFile, false);
+
+	var div = document.createElement("div");
+	div.setAttribute("id", "bar");
+	var first = document.body.firstChild;
+	document.body.insertBefore(div, first);
+	$i("bar").innerHTML = document.title;
+	$i("bar").title = time_stamp;
+
+	new_element = document.createElement("p");
+	new_element.setAttribute("id", "edit");
+	new_element.setAttribute("class", "no-select");
+	new_element.innerHTML = "<span>[edit]</span>";
+	document.body.appendChild(new_element);
+
+	new_element2 = document.createElement("p");
+	new_element2.setAttribute("id", "back");
+	new_element2.setAttribute("class", "no-select");
+	new_element2.innerHTML = "<span onclick='javascript:history.go(-1)'>[go(-1)]</span>";
+	document.body.appendChild(new_element2);
+
+	new_element3 = document.createElement("p");
+	new_element3.setAttribute("id", "home");
+	new_element3.setAttribute("class", "no-select");
+	new_element3.innerHTML = "<span onclick='location.href=`left.html`;top.postMessage(`gallery_show_right`, `*`)'>[home]</span>";
+	document.body.appendChild(new_element3);
+
+	new_element4 = document.createElement("button");
+	new_element4.setAttribute("id", "gotop");
+	new_element4.onclick = topFunction;
+	new_element4.innerHTML = "^";
+	document.body.appendChild(new_element4);
+
+	document.getElementById("edit").onclick = function() {
+		var a = document.getElementsByTagName("pre")[0];
+		if (a.contentEditable == "true") {
+			a.contentEditable = "false";
+			document.body.style.backgroundColor = "#000";
+		} else {
+			a.contentEditable = "true";
+			document.body.style.backgroundColor = "#222222";
+			// when the contenteditable gets focused, start listening to key presses
+			a.addEventListener('focus', () =>
+				window.addEventListener('keydown', onKeyDown)
+			)
+			// when the contenteditable looses focus, remove "keydown" event listener
+			a.addEventListener('blur', () =>
+				window.removeEventListener('keydown', onKeyDown)
+			)
+		}
+	};
+		
+	$t("pre")[0].onmousedown=function (e1) {
+		if($t("pre")[0].contentEditable != "true"){
+			mouseXPosition = e1.pageX;
+		}
+	};
+	$t("pre")[0].onmouseup=function (e2) {
+		if($t("pre")[0].contentEditable != "true"){
+			var excerpted = false;
+			var selection = window.getSelection();
+			var selectedText = selection.toString();
+			var startPoint = window.getSelection().getRangeAt(0).startOffset;
+			var endPoint = window.getSelection().getRangeAt(0).endOffset;
+			var anchorTag = selection.anchorNode.parentNode;
+			var focusTag = selection.focusNode.parentNode;
+			if ((e2.pageX - mouseXPosition) < 0) {
+				focusTag = selection.anchorNode.parentNode;
+				anchorTag = selection.focusNode.parentNode;
+			}
+			if (selectedText.length === (endPoint - startPoint)) {
+				excerpted = true;
+				if (anchorTag.className !== "excerpt") {
+					excerptSelection();
+				} else {
+					var afterText = selectedText + "<i class = 'excerpt'>" + anchorTag.innerHTML.substr(endPoint) + "</i>";
+					anchorTag.innerHTML = anchorTag.innerHTML.substr(0, startPoint);
+					anchorTag.insertAdjacentHTML('afterend', afterText);
+				}
+			}else{
+				if(anchorTag.className !== "excerpt" && focusTag.className !== "excerpt"){
+					excerptSelection();  
+					excerpted = true;
+				}
+			}
+			if (anchorTag.className === "excerpt" && focusTag.className === 'excerpt' && !excerpted) {
+				excerpted = true;
+
+				var afterHtml = anchorTag.innerHTML.substr(startPoint);
+				var outerHtml = selectedText.substr(afterHtml.length, selectedText.length - endPoint - afterHtml.length);
+				var anchorInnerhtml = anchorTag.innerHTML.substr(0, startPoint);
+				var focusInnerHtml = focusTag.innerHTML.substr(endPoint);
+				var focusBeforeHtml = focusTag.innerHTML.substr(0, endPoint);
+				selection.deleteFromDocument();
+				anchorTag.innerHTML = anchorInnerhtml;
+				focusTag.innerHTml = focusInnerHtml;
+				var anchorafterHtml = afterHtml + outerHtml + focusBeforeHtml;
+				anchorTag.insertAdjacentHTML('afterend', anchorafterHtml);
+			}
+			if (anchorTag.className === "excerpt" && !excerpted) {
+				excerpted = true;
+				var Innerhtml = anchorTag.innerHTML.substr(0, startPoint);
+				var afterHtml = anchorTag.innerHTML.substr(startPoint);
+				var outerHtml = selectedText.substr(afterHtml.length, selectedText.length);
+				selection.deleteFromDocument();
+				anchorTag.innerHTML = Innerhtml;
+				anchorTag.insertAdjacentHTML('afterend', afterHtml + outerHtml);
+			 }
+			if (focusTag.className === 'excerpt' && !excerpted) {
+				excerpted = true;
+				var beforeHtml = focusTag.innerHTML.substr(0, endPoint);
+				var outerHtml = selectedText.substr(0, selectedText.length - beforeHtml.length);
+				selection.deleteFromDocument();
+				focusTag.innerHTml = focusTag.innerHTML.substr(endPoint);
+				outerHtml += beforeHtml;
+				focusTag.insertAdjacentHTML('beforebegin', outerHtml );
+			}
+			if (!excerpted) {
+				excerptSelection();
+			}
+			document.querySelectorAll('.excerpt').forEach(function (e) {
+				var f = e.innerHTML;
+				if(f.length == 0) {
+					e.remove();
+					Excerpt();
+				}
+			});	
+			selection.removeAllRanges();
+			Excerpt();
+		}
+	};
+	$i("link").style.paddingLeft=(document.body.clientWidth-$i("link").clientWidth)/2+"px";
+	$i("link").style.opacity=1;
+};
+
+window.onscroll = function() {
+	var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+	var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+	var scrolled = (winScroll / height) * 100;
+	$i("processBar").style.width = scrolled + "%";
+	document.body.scrollTop > 500 || document.documentElement.scrollTop > 500 ? document.getElementById("gotop").style.display = "block" : document.getElementById("gotop").style.display = "none"
+}
+
+function topFunction() {
+	if (!+[1, ]) {
+		document.body.scrollIntoView();
+	} else {
+		document.body.scrollIntoView({
+			behavior: "smooth"
+		});
+	}
+}
+
+top.postMessage("webamp_off", "*")
+</script>
+
+</html>

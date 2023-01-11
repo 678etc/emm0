@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>cy的网络空间</title>
+
+<style>
+html,
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #000
+}
+
+#left,
+#right {
+	float: left;
+	height: 100vh;
+	border: none
+}
+
+#left {
+	width: calc(85% - 4px);
+}
+
+#right {
+	width: calc(15% - 4px);
+}
+
+#home {
+	top: 3px;
+	position: fixed;
+	text-decoration: underline;
+	color: dimgray;
+	right: 230px;
+	cursor: pointer;
+	display: none;
+	-moz-user-select: none;
+	/*火狐*/
+	-webkit-user-select: none;
+	/*webkit浏览器*/
+	-ms-user-select: none;
+	/*IE10*/
+	-khtml-user-select: none;
+	/*早期浏览器*/
+	user-select: none;
+	user-modify: read-only !important;
+}
+
+#ncr {
+	display: none;
+}
+
+#webamp {
+	display: none;
+	top: 80px!important;
+	left: calc(35% - 145px)!important
+}
+
+#marquee {
+    display: none!important;
+}
+</style>
+
+<script type="text/javascript">
+if (self != top) {
+	top.location = self.location
+};
+var userAgent = navigator.userAgent;
+if (!(userAgent.indexOf("Chrome") > -1)) {
+	alert("This website was debugged on the Chrome platform");
+}
+window.addEventListener(
+	"message",
+	function(event) {
+		if (event.data == "hide_right") {
+			document.getElementById("home").style.display = "block";
+			document.getElementsByTagName("iframe")[0].style.width = "100%";
+			document.getElementsByTagName("iframe")[1].style.width = "0";
+		} else if (event.data == "gallery_hide_right") {
+			document.getElementsByTagName("iframe")[0].style.width = "100%";
+			document.getElementsByTagName("iframe")[1].style.width = "0";
+		} else if (event.data == "gallery_show_right") {
+			document.getElementsByTagName("iframe")[0].style.width = "calc(85% - 4px)";
+			document.getElementsByTagName("iframe")[1].style.width = "calc(15% - 4px)";
+		} else if (event.data == "reset_locate") {
+			document.getElementsByTagName("iframe")[1].contentWindow.postMessage(event.data, "*");
+		} else if (event.data == "hide_right_focus_left") {
+			document.getElementById("home").style.display = "block";
+			document.getElementsByTagName("iframe")[0].style.width = "100%";
+			document.getElementsByTagName("iframe")[1].style.width = "0";
+			document.getElementsByTagName("iframe")[0].focus(); //跳转到兄弟iframe时转移焦点，使内嵌pdf首次回车、空格、双击时的快捷方式生效
+		} else if (event.data == "webamp_on") {
+			document.getElementById("webamp").style.display="block";
+		} else if (event.data == "webamp_off") {
+			document.getElementById("webamp").style.display="none";
+		} else {
+			document.getElementsByTagName("iframe")[0].contentWindow.postMessage(event.data, "*");
+		}
+	},
+	false
+);
+
+function home() {
+	document.getElementById("home").style.display = "none";
+	document.getElementsByTagName("iframe")[0].style.width = "calc(85% - 4px)";
+	document.getElementsByTagName("iframe")[1].style.width = "calc(15% - 4px)";
+	document.getElementsByTagName("iframe")[0].src = "html/left.html";
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i].trim();
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
+}
+
+function addNewStyle(newStyle) {
+	var styleElement = document.getElementById('styles_js');
+	if (!styleElement) {
+		styleElement = document.createElement('style');
+		styleElement.type = 'text/css';
+		styleElement.id = 'styles_js';
+		document.getElementsByTagName('head')[0].appendChild(styleElement);
+	}
+	styleElement.appendChild(document.createTextNode(newStyle));
+}
+
+function dynamicLoadJs(url, callback) {
+	let head = document.getElementsByTagName('head')[0]
+	let script = document.createElement('script')
+	script.type = 'text/javascript'
+	script.src = url
+	if (typeof callback == 'function') {
+		script.onload = script.onreadystatechange = function () {
+			if (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete') {
+				callback()
+				script.onload = script.onreadystatechange = null
+			}
+		}
+	}
+	head.appendChild(script)
+}
+
+function downloadJSAtOnload() {
+	var x = getCookie("x");
+	if (x == "") {
+		document.cookie = "x='No Country Redirection'";
+		document.getElementById("ncr").click();
+	};
+
+	dynamicLoadJs('../ex/webamp/webamp.bundle.js',() => {
+		const webamp = new Webamp({
+//			https://github.com/captbaritone/webamp/blob/master/packages/webamp/docs/usage.md
+//
+			initialTracks: [{
+				metaData: {
+					artist: "中島みゆき",
+					title: "六花",
+				},
+				url: "../ex/webamp/06 六花.mp3"
+			}],
+			initialSkin: {
+				url: "../ex/webamp/UnderTheSkin.wsz"
+			},
+			availableSkins: [
+				{ url: "../ex/webamp/UnderTheSkin.wsz", name: "UnderTheSkin" },
+				{ url: "../ex/webamp/PureB_3.wsz", name: "PureB_3" }
+			],			
+
+		});			
+		webamp.renderWhenReady(document.getElementById("amp"));
+		setTimeout(function(){
+			document.getElementById("presets").click();
+			setTimeout(function(){
+				document.getElementsByClassName("parent")[0].getElementsByTagName("ul")[0].getElementsByTagName("li")[11].click();
+			},50);
+		},500);
+		setTimeout(function(){addNewStyle('#webamp-context-menu {display:block!important}')},2000);
+	})
+}
+
+window.addEventListener ? window.addEventListener("load", downloadJSAtOnload, !1) : window.attachEvent ? window.attachEvent("onload", downloadJSAtOnload) : window.onload = downloadJSAtOnload
+</script>
+
+  </head>
+  <body>
+    <iframe src="html/left.html" frameborder="0" scrolling="auto" id="left" name="left"></iframe>
+    <iframe src="html/right.html" frameborder="0" scrolling="auto" id="right"></iframe>
+    <span id="home" onclick="home()">[home]</span>
+    <a id="ncr" href="https://www.google.com/ncr" target="_blank">ncr</a>
+	<div id="amp"></div>
+  </body>
+</html>

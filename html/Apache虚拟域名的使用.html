@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Apache虚拟域名的使用</title>
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <script src="../js/default.js" type="text/javascript"></script>
+  </head>
+  <body><span id="time-stamp"></span>
+ 	<pre>
+1. 下载页面
+<p class="code">http://www.apachehaus.com/cgi-bin/download.plx</p>
+2. 解压到C盘根目录，管理员安装
+<p class="code">cd \Apache24
+cd bin
+httpd -t
+httpd -k install -n Apache</p>
+3. 打开 C:\Apache24\conf\httpd.conf，引用httpd-vhosts.conf
+<p class="code">
+# Virtual hosts
+Include conf/extra/httpd-vhosts.conf
+</p>
+4. 打开 C:\Apache24\conf\extra\httpd-vhosts.conf，分配目录域名和权限
+<p class="code">&lt;VirtualHost *:80&gt;
+    DocumentRoot "D:\Drive\emm0"
+    ServerName local_site.com
+&lt;/VirtualHost&gt;
+
+NameVirtualHost 127.0.0.1:80
+&lt;Directory "D:\Drive\emm0"&gt;
+    AllowOverride All
+    Require all granted
+&lt;/Directory&gt;</p>
+5. 打开 C:\Windows\System32\drivers\etc\hosts，加至hosts
+<p class="code">127.0.0.1 local_site.com</p>
+6. 为 C:\Apache24\bin\ApacheMonitor.exe创建快捷方式，加入开机启动项
+<p class="code">
+shell:startup
+
+msconfig
+</p>
+	</pre>
+  </body>
+</html>

@@ -1,0 +1,456 @@
+﻿body {
+	background-color: #000;
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	color: dimgray;
+	text-decoration: none;
+}
+
+a:hover {
+	color: white;
+}
+
+a:after {
+	padding-left: 3px;
+	content: "↗";
+	color: blue;
+	font-size: 50%;
+}
+
+img {
+	max-width: 100%;
+}
+
+pre {
+	font-family: "細明體", "AR PL UMing TW", "Inconsolata", "LiSongPro", monospace;
+	padding: 60px;
+	color: dimgray;
+	font-size: 24px;
+	width: 90%;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	line-height: 1.8;
+	outline: none;
+}
+
+pre::selection,
+.code::selection {
+	background: #e5e5e5;
+	color: #006cc6;
+}
+
+pre::-moz-selection,
+.code::-moz-selection {
+	background: #e5e5e5;
+	color: #006cc6;
+}
+
+p {
+	margin: 0 !important;
+}
+
+i {
+	padding-right: 10px;
+	color: sienna;
+}
+
+#bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding-left: 5px;
+	cursor: default;
+	color: yellow;
+	background-color: #0c0a66;
+	font-family: "Arial Unicode MS", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	width: 100%;
+	z-index: 2;
+}
+
+#time-stamp {
+	display: none;
+}
+
+.no-select {
+	-moz-user-select: none;
+	/*火狐*/
+	-webkit-user-select: none;
+	/*webkit浏览器*/
+	-ms-user-select: none;
+	/*IE10*/
+	-khtml-user-select: none;
+	/*早期浏览器*/
+	user-select: none;
+	user-modify: read-only !important;
+}
+
+#edit {
+	position: fixed;
+	color: dimgray;
+	top: 3px;
+	text-decoration: underline;
+	right: 65px;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+	z-index: 3
+}
+
+#back {
+	position: fixed;
+	color: dimgray;
+	top: 3px;
+	text-decoration: underline;
+	right: 0px;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+	z-index: 3
+}
+
+#home {
+	position: fixed;
+	color: dimgray;
+	top: 3px;
+	text-decoration: underline;
+	right: 115px;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+	z-index: 3
+}
+
+#gotop {
+	opacity: 0.5;
+	background-color: gray;
+	font-size: 20px;
+	display: none;
+	position: fixed;
+	top: 80%;
+	right: 10px;
+	z-index: 99;
+	cursor: pointer;
+	padding: 5px 20px;
+	border: none
+}
+
+.highlight {
+	background-color: yellow;
+	color: dimgray;
+}
+
+.lrc {
+	padding: 0 !important;
+	color: aliceblue;
+}
+
+#hgallery {
+	display: block;
+	content: '';
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	background-color: #000;
+	visibility: hidden;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	opacity: 0;
+	-webkit-transition: .1s;
+	transition: .1s;
+	z-index: 999;
+	moz-user-select: -moz-none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none
+}
+
+.hg-disable-scrolling {
+	overflow: hidden !important
+}
+
+#hg-bg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	z-index: 1
+}
+
+#hgallery.open {
+	visibility: visible !important;
+	opacity: 1
+}
+
+#hg-pic-cont {
+	max-width: calc(70% - 40px);
+	max-height: 90vh;
+	cursor: default;
+	z-index: 999;
+	position: relative;
+	transition: transform .1s;
+	transform: scale(1)
+}
+
+#hg-pic-cont.hg-transition {
+	transform: scale(.1)
+}
+
+#hg-bg::before {
+	content: attr(data-subtext);
+	color: yellow;
+	font-size: 16pt;
+	font-style: italic;
+	position: absolute;
+	display: block;
+	left: 50%;
+	top: 5px
+}
+
+#hg-bg::after {
+	content: attr(data-howmany);
+	color: cyan;
+	font-size: 8pt;
+	position: absolute;
+	display: block;
+	right: 5px;
+	top: 5px
+}
+
+#hg-pic {
+	width: auto;
+	height: auto;
+	min-height: 100px;
+	min-width: 100px;
+	max-width: 100%;
+	max-height: 90vh;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	display: block;
+	cursor: default;
+	-o-object-fit: contain;
+	object-fit: contain;
+	margin: 0
+}
+
+#hg-pic:hover {
+	-webkit-transform: none;
+	transform: none;
+	-webkit-box-shadow: none;
+	box-shadow: none
+}
+
+#hgallery span {
+	position: fixed;
+	display: block;
+	color: #aaa;
+	margin: auto 0;
+	width: 30px;
+	height: 40px;
+	z-index: 999;
+	cursor: pointer;
+	visibility: hidden
+}
+
+#hgallery.open span {
+	visibility: visible;
+	color: white;
+	opacity: .6;
+	font-size: 8pt;
+	moz-user-select: -moz-none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none
+}
+
+#hgallery span:hover {
+	opacity: 1;
+	background-color: yellow;
+	color: red;
+	font-weight: bold
+}
+
+#hgallery span#hg-prev {
+	right: 65px;
+	top: 5px
+}
+
+#hgallery span#hg-prev:active {
+	right: 67px
+}
+
+#hgallery span#hg-next {
+	right: 35px;
+	top: 5px
+}
+
+#hgallery span#hg-next:active {
+	right: 33px
+}
+
+.hg-unvisible {
+	opacity: 0 !important;
+	visibility: hidden !important
+}
+
+
+.code {
+	width: 100%;
+	margin-top: 40px;
+	padding: 10px 10px 10px 40px;
+	font-size: 13px;
+	line-height: 18px;
+	background-color: #333;
+	font-family: "Lucida Console", Consolas, Monaco;
+	white-space: pre-wrap;
+	word-break: break-all;
+	position: relative;
+	overflow: hidden;
+}
+
+.code::before {
+	content: '01\A 02\A 03\A 04\A 05\A 06\A 07\A 08\A 09\A 10\A 11\A 12\A 13\A 14\A 15\A 16\A 17\A 18\A 19\A 20\A 21\A 22\A 23\A 24\A 25\A 26\A 27\A 28\A 29\A 30\A 31\A 32\A 33\A 34\A 35\A 36\A 37\A 38\A 39\A 40\A 41\A 42\A 43\A 44\A 45\A 46\A 47\A 48\A 49\A 50\A 51\A 52\A 53\A 54\A 55\A 56\A 57\A 58\A 59\A 60\A 61\A 62\A 63\A 64\A 65\A 66\A 67\A 68\A 69\A 70\A 71\A 72\A 73\A 74\A 75\A 76\A 77\A 78\A 79\A 80\A 81\A 82\A 83\A 84\A 85\A 86\A 87\A 88\A 89\A 90\A 91\A 92\A 93\A 94\A 95\A 96\A 97\A 98\A 99';
+	position: absolute;
+	top: 10px;
+	bottom: 10px;
+	left: 0;
+	text-align: right;
+	background-color: #555;
+	color: #777;
+	outline: 100px solid #555;
+	clip: rect(-100px 2em 9999px 0);
+	clip: rect(-100px 3.5ch 9999px 0);
+	overflow: hidden;
+}
+
+.accordion {
+	box-sizing: border-box;
+	display: flex;
+	overflow: hidden;
+	width: 100%;
+}
+
+.accordion-select {
+	cursor: pointer;
+	margin: 0;
+	opacity: 0;
+	z-index: 1;
+}
+
+.accordion-title {
+	position: relative;
+}
+
+.accordion-title:not(:nth-last-child(2))::after {
+	border: 1px solid transparent;
+	bottom: 0;
+	content: '';
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.accordion-title span {
+	bottom: 0px;
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	white-space: nowrap;
+	width: 100%;
+}
+
+.accordion-content {
+	box-sizing: border-box;
+	overflow: auto;
+	position: relative;
+	transition: margin 0.3s ease 0.1s;
+}
+
+.accordion-select:checked+.accordion-title+.accordion-content {
+	margin-bottom: 0;
+	margin-right: 0;
+}
+
+/* Generated styles starts here */
+.accordion {
+	width: 50%;
+	border-color: #d5d5d5;
+	border-style: solid;
+	border-width: 1px;
+	flex-direction: column;
+	height: auto;
+	margin: 5% 0 0 15%;
+}
+
+.accordion-title,
+.accordion-select {
+	background-color: gray;
+	width: 100%;
+	height: 20px;
+}
+
+.accordion-select {
+	margin-bottom: -20px;
+	margin-right: 0;
+}
+
+.accordion-title:not(:nth-last-child(2))::after {
+	border-bottom-color: #c1c1c1;
+	border-right-color: transparent;
+}
+
+.accordion-select:hover+.accordion-title,
+.accordion-select:checked+.accordion-title {
+	background-color: #999999;
+	font-weight: bold;
+}
+
+.accordion-title span {
+	transform: rotate(0deg);
+	-ms-writing-mode: lr-tb;
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
+	padding-left: 15px;
+	padding-right: 15px;
+	line-height: 20px;
+}
+
+.accordion-content {
+	background-color: sienna;
+	height: 750px;
+	margin-bottom: -750px;
+	margin-right: 0;
+	padding: 30px;
+	width: 100%;
+}
+
+::-webkit-scrollbar {
+	width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #222;
+}
+
+::-webkit-scrollbar-track {
+	background-color: #111;
+}

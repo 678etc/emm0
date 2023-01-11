@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pdfJs插件自定义</title>
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <script src="../js/default.js" type="text/javascript"></script>
+  </head>
+  <body><span id="time-stamp"></span>
+ 	<pre>
+viewer.js
+<p class="code">
+默认横向&平移模式
+
+const DEFAULT_SCALE_VALUE = "page-fit";
+
+
+const ScrollMode = {
+  UNKNOWN: -1,
+  VERTICAL: 0,
+  HORIZONTAL: 1,
+  WRAPPED: 2
+};
+
+
+const TextLayerMode = {
+  DISABLE: 0,
+  ENABLE: 1,
+  ENABLE_ENHANCE: 2
+};
+
+
+/*空格
+      case 13:
+      case 32:
+        if (!isViewerInPresentationMode) {
+          turnOnlyIfPageFit = true;
+        }
+
+        turnPage = 1;
+        break;
+*/
+</p>
+viewer.html
+<p class="code">
+添加全屏、平移/文字选择快捷方式
+
+button id="scrollVertical" class="dddd secondaryToolbarButton scrollModeButtons scrollVertical toggled"...
+
+span style="margin-left: 50px; padding-top: 5px;">Enter = [F11] &nbsp;&nbsp; Spacebar/dblClick = [Select/Move]
+
+
+
+
+.dddd{min-width:auto!important;margin-top: 3px;}
+.eeee{padding-top: 8px;padding-right: 6px;}
+.x{display:none!important}
+.y{top:0!important}
+
+
+
+
+aaaa = document.querySelector('#scrollHorizontal');
+bbbb = document.querySelector('#viewerContainer');
+gggg = document.querySelector('#cursorHandTool');
+hhhh = document.querySelector('#cursorSelectTool');
+
+setInterval(function () {
+	if(aaaa.matches('.toggled')){
+		bbbb.addEventListener("wheel",cccc,false);	
+	} else {
+		bbbb.removeEventListener("wheel",cccc,false);	
+	}
+}, 1000);
+
+function cccc(event) {
+	event.preventDefault();
+	bbbb.scrollLeft += event.deltaY;	
+}
+
+function fullScreen() {
+    var el = document.documentElement;
+    var rfs = el.requestFullScreen || el.webkitRequestFullScreen ||
+        el.mozRequestFullScreen || el.msRequestFullScreen;
+    if (typeof rfs != "undefined" && rfs) {
+        rfs.call(el);
+    } else if (typeof window.ActiveXObject != "undefined") {
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript != null) {
+            wscript.SendKeys("{F11}");
+        }
+    }
+}
+
+function exitFullScreen(el) {
+    var el = document
+    var cfs = el.cancelFullScreen || el.mozCancelFullScreen || el.msExitFullscreen || el.webkitExitFullscreen ||
+        el.exitFullscreen,
+        wscript
+    if (cfs) {
+        cfs.call(el);
+        return;
+    } else if (typeof window.ActiveXObject !== "undefined") {
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript != null) {
+            wscript.SendKeys("{F11}");
+        }
+    } else {
+        alert('浏览器不支持全屏API或已被禁用')
+    }
+}
+
+function event1(){
+	return fullScreen();
+}
+function event2(){
+	exitFullScreen();
+}
+
+document.getElementsByClassName('eeee')[0].addEventListener("click",event1);
+document.getElementsByClassName('eeee')[0].addEventListener("click",event2);
+
+function ffff(){
+	if(gggg.matches('.toggled')){
+		hhhh.click();	
+	} else {
+		gggg.click();	
+	}
+}
+
+
+flag=true;
+window.addEventListener('keydown', function(e) {
+  if(e.keyCode == 32){
+	e.preventDefault();
+	ffff();
+  }else if(e.keyCode == 13){
+	  if(flag){
+		document.getElementsByClassName("toolbar")[0].classList.add("x");
+		document.querySelector('#viewerContainer').classList.add("y");	  
+		event1();
+	  }else{
+		document.getElementsByClassName("toolbar")[0].classList.remove("x");
+		document.querySelector('#viewerContainer').classList.remove("y");	  
+		event2();
+	  }
+	  flag=!flag;
+  }
+});
+
+bbbb.ondblclick = ffff;
+
+window.setTimeout(function () {
+	if(document.querySelector('#errorMessage').innerHTML=="Missing_PDF_file"){
+		document.querySelector('#openFile').click();
+	}
+}, 3000);
+</p>
+	</pre>
+  </body>
+</html>

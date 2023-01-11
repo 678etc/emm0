@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>批处理范例</title>
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <script src="../js/default.js" type="text/javascript"></script>
+  </head>
+  <body><span id="time-stamp"></span>
+ 	<pre>
+/?查看命令的附加参数	
+<p class="code">C:\WINDOWS\system32>del /?
+删除一个或多个文件。
+
+DEL [/P] [/F] [/S] [/Q] [/A[[:]attributes]] names
+ERASE [/P] [/F] [/S] [/Q] [/A[[:]attributes]] names
+
+  names         指定一个或多个文件或者目录列表。
+                通配符可用来删除多个文件。
+                如果指定了一个目录，该目录中的所
+                有文件都会被删除。
+
+  /P            删除每一个文件之前提示确认。
+  /F            强制删除只读文件。
+  /S            删除所有子目录中的指定的文件。
+  /Q            安静模式。删除全局通配符时，不要求确认
+  /A            根据属性选择要删除的文件
+  属性          R  只读文件            S  系统文件
+                H  隐藏文件            A  准备存档的文件
+                I  无内容索引文件      L  重新分析点
+                O  脱机文件            -  表示“否”的前缀
+</p>
+按名称升序合并txt
+<p class="code">type *.txt>>all.txt</p>
+	</pre>
+  </body>
+</html>

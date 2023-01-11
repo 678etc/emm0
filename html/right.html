@@ -1,0 +1,686 @@
+<html>
+	<head>
+		<title>right</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+<style>
+body {
+	background-color: #000;
+	margin-left: 10px;
+	font-family: sans-serif;
+	font-size: 14px;
+	line-height: 1.5;
+	color: dimgray
+}
+
+a {
+	color: dimgray;
+	text-decoration: none;
+	display: block
+}
+
+a:hover {
+	background-color: #0c0a66
+}
+
+a:not(.external_link):before {
+	padding-right: 6px;
+	content: "\205e";
+	opacity: .5;
+}
+
+ul {
+	padding-left: 20px
+}
+
+li {
+	list-style: none
+}
+
+.x {
+	display: block;
+	cursor: pointer;
+	color: dimgray;
+}
+
+.x:hover {
+	font-weight: 700;
+	background-color: #0c0a66
+}
+
+.x::before {
+	content: "\25B6";
+	display: inline-block;
+	margin-right: 3px;
+	font-size: 70%
+}
+
+.x-down::before {
+	-ms-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	transform: rotate(90deg)
+}
+
+.y {
+	display: none
+}
+
+.active {
+	display: block
+}
+
+::-webkit-scrollbar {
+	width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #222;
+}
+
+::-webkit-scrollbar-track {
+	background-color: #111;
+}
+
+select {
+	background-color: #999;
+}
+
+#gotop {
+	opacity: 0.5;
+	background-color: gray;
+	font-size: 20px;
+	display: none;
+	position: fixed;
+	top: 80%;
+	right: 10px;
+	z-index: 99;
+	cursor: pointer;
+	padding: 5px 20px;
+}
+
+input:focus {
+	outline: none;
+}
+
+.currLink {
+	background-color: #0c0a66
+}
+
+.external_link:after {
+	padding-left: 3px;
+	content: "↗";
+	color: blue;
+	font-size: 50%;
+}
+
+.pdf:after {
+	font-family: cursive;
+	padding-left: 3px;
+	content: "PDF";
+	color: firebrick;
+	font-size: 50%;
+}
+
+.noResult:after {
+	content: "0 results";
+	font-style: italic;
+}
+
+form {
+	margin-top: 10px;
+}
+
+#keyword {
+	width: 180px;
+	background-color: #333;
+	color: #888
+}
+
+#sel {
+	display: none;
+	position: absolute;
+	width: 180px;
+	z-index:3
+}
+
+#match {
+	vertical-align: top;
+	vertical-align: top;
+	border-color: #666
+}
+
+#div_Result {
+	display: none
+}
+
+#Result {
+	width: 240px
+}
+
+#esc {
+	color: red;
+	cursor: pointer
+}
+
+#tree {
+	margin: 10px 0 100px 0;
+	padding: 0
+}
+
+#btn_tree {
+	position: fixed;
+	left: 210px;
+	cursor: pointer;
+	display: none
+}
+
+#btn_tree>span {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	user-modify: read-only !important;
+}
+</style>
+
+	</head>
+	<body>
+		<form action="" method="post" onsubmit="SearchIt();return false;">
+			<div>
+				<input id="keyword" 
+					onblur=setTimeout("$i('sel').style.display='none';",150) 
+					onclick="this.select();$i('sel').style.display='block';srh()" 
+					onpaste=setTimeout("SearchIt()",150);setTimeout("$i('sel').style.display='none';",150) 
+					onkeydown=oo(event)
+				/>
+				<select id="sel" onclick="$i('keyword').value = this.options[this.selectedIndex].text;srh2();" size="10"></select>
+				<input id="match" onclick="SearchIt();return false;" type="submit" value="match" />
+			</div>
+			<div id="div_Result">
+				<select id="Result" onclick="openLink()" size="15"></select>
+				<span id="esc" onclick="$i('div_Result').style.display='none';$i('keyword').value=''"> Esc</span>
+			</div>
+		</form>
+		<ul id="tree" onmouseout='$i("btn_tree").style.display = "none"' onmouseover='$i("btn_tree").style.display = "block"'>
+			<span id="btn_tree"><span onclick="hideLinks()">[h]</span>&nbsp;&nbsp;&nbsp;&nbsp;<span onclick="showLinks()">[s]</span></span>
+			<br />
+			
+			<li><span class="x">影视</span>
+				<ul class="y">
+					<li><a>《海蒂和爷爷》</a></li>
+					<li><a>《海绵宝宝》</a></li>
+					<li><a>《环游世界八十天》</a></li>
+					<li><a>《败家仔》</a></li>
+					<li><a>《僵尸先生》</a></li>
+					<li><a>《雪山飞狐》1991</a></li>
+					<li><a>《甘十九妹》</a></li>
+					<li><a>《天蚕变》</a></li>
+					<li><a>《老友记》</a></li>
+					<li><a>《翼》</a></li>
+					<li><a>《母女情深》</a></li>
+					<li><a>《走出非洲》</a></li>
+					<li><a>《不可饶恕》</a></li>
+					<li><a>《莫斯科不相信眼泪》</a></li>
+					<li><a>《飞屋环游记》</a></li>
+					<li><a>《六轮枪强盗团》</a></li>
+					<li><a>《兵临城下》</a></li>
+					<li><a>《荒岛余生》2000</a></li>
+					<li><a>《黑猫白猫》</a></li>
+					<li><a>《搞笑一家人》</a></li>
+					<li><a>《圆月弯刀》1997</a></li>
+					<li><a>《小侠龙旋风》</a></li>
+					<li><a>《武林外传》</a></li>
+					<li><a>《憨豆先生》TV</a></li>
+					<li><a>《大醉侠》2002</a></li>
+				</ul>
+			</li>
+			<li><span class="x">书籍</span>
+				<ul class="y">
+					<li><a>《笑林广记》</a></li>
+					<li><a>《细说中国历史》</a></li>
+					<li><a>《小说写作教程》</a></li>
+					<li><a>《金瓶梅词话》</a></li>
+					<li><a>《镜花缘》</a></li>
+					<li><a>《智慧金块》</a></li>
+					<li><a>《现代汉语词典》</a></li>
+				</ul>
+			</li>
+			<li><span class="x">文章</span>
+				<ul class="y">
+					<li><a>今天我的猫叫了一声</a></li>
+					<li><a>小兵人儿</a></li>
+					<li><a>恶作剧</a></li>
+					<li><a>毒药总结</a></li>
+					<li><a>人体死亡到腐烂的一系列过程</a></li>
+					<li><a>女人的妓女情结和男人的嫖客情结</a></li>
+				</ul>
+			</li>
+			<li><span class="x">整理</span>
+				<ul class="y">
+					<li><a>看过的</a></li>
+					<li><a>碎片</a></li>
+					<li><a>民谚</a></li>
+					<li><a>古时幽默</a></li>
+					<li><a>外国幽默</a></li>
+					<li><a>成人笑话</a></li>
+				</ul>
+			</li>
+			<li><span class="x">户外</span>
+				<ul class="y">
+					<li><a>体况</a></li>
+					<li><a>参考装备</a></li>
+					<li><a>生火</a></li>
+					<li><a>取水</a></li>
+					<li><a>方位</a></li>
+					<li><a>鉴别植物毒性</a></li>
+					<li><a>食物来源</a></li>
+					<li><a>食物处理</a></li>
+					<li><a>防昆虫叮咬</a></li>
+					<li><a>冷暖</a></li>
+					<li><a>庇护所</a></li>
+				</ul>
+			</li>
+			<li><span class="x">记事</span>
+				<ul class="y">
+					<li><a>2301</a></li>
+					<li><a>2212</a></li>
+					<li><a>2203</a></li>
+				</ul>
+			</li>
+			<li><span class="x">中島みゆき</span>
+				<ul class="y">
+					<li><a>1976】みんな去ってしまった</a></li>
+					<li><a>1976】私の声が聞こえますか</a></li>
+					<li><a>1977】あ-り-が-と-う</a></li>
+					<li><a>1978】愛していると云ってくれ</a></li>
+					<!--
+					<li><a>1979】おかえりなさい</a></li>
+					<li><a>1979】親愛なる者へ</a></li>
+					<li><a>1980】生きていてもいいですか</a></li>
+					<li><a>1981】臨月</a></li>
+					<li><a>1982】寒水魚</a></li>
+					<li><a>1983】予感</a></li>
+					<li><a>1984】はじめまして</a></li>
+					<li><a>1985】miss. M_</a></li>
+					<li><a>1985】御色なおし</a></li>
+					<li><a>1986】36.5℃</a></li>
+					<li><a>1986】中島みゆき THE BEST</a></li>
+					<li><a>1987】Singles</a></li>
+					<li><a>1987】歌暦</a></li>
+					<li><a>1988】グッバイガール</a></li>
+					<li><a>1988】中島みゆき</a></li>
+					<li><a>1989】Presents Best Selection 16</a></li>
+					<li><a>1989】回帰熱</a></li>
+					<li><a>1990】夜を往け</a></li>
+					<li><a>1991】歌でしか言えない</a></li>
+					<li><a>1992】Best Selection II</a></li>
+					<li><a>1992】EAST ASIA</a></li>
+					<li><a>1993】時代 -Time goes around-</a></li>
+					<li><a>1994】LOVE OR NOTHING</a></li>
+					<li><a>1994】Singles II</a></li>
+					<li><a>1995】10WINGS</a></li>
+					<li><a>1996】パラダイス-カフェ</a></li>
+					<li><a>1996】大吟醸</a></li>
+					<li><a>1998】わたしの子供になりなさい</a></li>
+					<li><a>1998】命の別名 _ 糸 - Single</a></li>
+					<li><a>1998】大銀幕</a></li>
+					<li><a>1999】日 - WINGS</a></li>
+					<li><a>1999】月 - WINGS</a></li>
+					<li><a>2000】短篇集</a></li>
+					<li><a>2001】心守歌-こころもりうた</a></li>
+					<li><a>2002】Singles 2000</a></li>
+					<li><a>2002】おとぎばなし-Fairy Ring-</a></li>
+					<li><a>2002】美雪集</a></li>
+					<li><a>2003】恋文</a></li>
+					<li><a>2004】いまのきもち</a></li>
+					<li><a>2005】中島みゆきライヴ! Live at Sony Pictures Studios</a></li>
+					<li><a>2005】転　生(TEN-SEI)</a></li>
+					<li><a>2006】ララバイSINGER</a></li>
+					<li><a>2006】元気ですか</a></li>
+					<li><a>2007】I Love You, 答えてくれ</a></li>
+					<li><a>2008】歌旅 -中島みゆきコンサートツアー2007-</a></li>
+					<li><a>2009】DRAMA!</a></li>
+					<li><a>2010】真夜中の動物園</a></li>
+					<li><a>2011】荒野より</a></li>
+					<li><a>2012】常夜灯</a></li>
+					<li><a>2013】十二単 ~Singles 4~</a></li>
+					-->
+				</ul>
+			</li>
+			<li><span class="x">电脑</span>
+				<ul class="y">
+					<li><a>Apache虚拟域名的使用</a></li>
+					<li><a>pdfJs插件自定义</a></li>
+					<li><a>谷歌图片搜索宽幅展示</a></li>
+					<li><a>Gmail简化视图</a></li>
+					<li><a>邮件接收手机短信</a></li>
+					<li><a>VmWare的使用</a></li>
+					<li><a>javascript范例</a></li>
+					<li><a>Notepad++正则范例</a></li>
+					<li><a>批处理范例</a></li>
+					<li><a>网络代理的使用</a></li>
+					<li><a>BitLocker的使用</a></li>
+					<li><a>Windows的使用</a></li>
+					<li><a>在线工具</a></li>
+				</ul>
+			</li>
+		</ul>
+		<button onclick="topFunction()" id="gotop">^</button>
+	</body>
+
+<script>
+/*------------------------------+
+	简化
+-------------------------------*/
+function $i(x) {
+	return document.getElementById(x)
+}
+function $c(x) {
+	return document.getElementsByClassName(x)
+}
+
+
+/*------------------------------+
+	位置
+-------------------------------*/
+for (var b = document.querySelectorAll("#tree a:not(.pdf):not(.external_link)"), a = 0; a < b.length; a++){
+	b[a].addEventListener("click",
+		function(c) {
+			for (var b = document.querySelectorAll("#tree a:not(.pdf):not(.external_link)"), a = 0; a < b.length; a++) b[a].classList.remove("currLink");
+			c.target.classList.add("currLink");
+		}
+	);
+}
+for (var e = $c("pdf"), i = 0; i < e.length; i++) {
+	e[i].href = "../ex/pdf/web/viewer.html?file=../" + e[i].innerHTML + ".pdf";
+	e[i].target = "left";
+	e[i].onclick = function(x) {
+		top.postMessage("hide_right_focus_left", "*");
+		$c("currLink")[0].classList.remove("currLink");
+	}
+}
+window.addEventListener("message",
+	function() {
+		$c("currLink")[0].classList.remove("currLink")
+	},
+	"reset_locate"
+);
+
+
+/*------------------------------+
+	折叠
+-------------------------------*/
+for (i = 0; i < $c("x").length; i++){$c("x")[i].addEventListener("click",
+	function() {
+		this.parentElement.querySelector(".y").classList.toggle("active"),
+			this.classList.toggle("x-down")
+	});
+}
+function showLinks() {
+	var a = $c("x"),
+		b = $c("y");
+	for (i = 0; i < b.length; i++) b[i].classList.remove("x-down"),
+		b[i].classList.add("active");
+	for (i = 0; i < a.length; i++) a[i].classList.remove("active"),
+		a[i].classList.add("x-down")
+}
+function hideLinks() {
+	var a = $c("x"),
+		b = $c("y");
+	for (i = 0; i < a.length; i++) a[i].classList.remove("x-down"),
+		a[i].classList.add("active");
+	for (i = 0; i < b.length; i++) b[i].classList.remove("active"),
+		b[i].classList.add("x-down")
+}
+
+
+/*------------------------------+
+	链接
+-------------------------------*/
+for (var aTag_innerH = [], aTag = document.querySelectorAll("#tree a:not(.pdf):not(.external_link)"), i = 0; i < aTag.length; i++){
+	aTag[i].setAttribute("target", "left"),
+	aTag[i].setAttribute("href", aTag[i].innerHTML + ".html"),
+	aTag_innerH.push(aTag[i].innerHTML);
+}
+for (var b = $c("external_link"), a = 0; a < b.length; a++){
+	b[a].setAttribute("target", "_blank")
+}
+
+
+/*------------------------------+
+	回顶
+-------------------------------*/
+window.onscroll = function() {
+	document.body.scrollTop > 500 || document.documentElement.scrollTop > 500 ? $i("gotop").style.display = "block" : $i("gotop").style.display = "none"
+}
+function topFunction() {
+	if (!+[1, ]) {
+		document.body.scrollIntoView();
+	} else {
+		document.body.scrollIntoView({
+			behavior: "smooth"
+		});
+	}
+}
+
+
+/*------------------------------+
+	搜索
+-------------------------------*/
+var words = new Array, rank = new Array;
+function SearchIt() {
+	xx();
+	$i("div_Result").style.display = "block"
+	function i(c, d) {
+		var a, b = 0;
+		for (a = 0; a < rank.length; a++)
+			if (rank[a][0] == c) {
+				rank[a][1] += d;
+				return
+			}
+		b = rank.length,
+			rank[b] = new Array,
+			rank[b][0] = c,
+			rank[b][1] = d
+	}
+	var a, b, j, d, e = new Array;
+	d = $i("keyword").value;
+	var h = !1,
+		c = "";
+	for (a = 0, words.length = 0; a < d.length; a++) h ? '"' == d.charAt(a) ? ("" != c && (words[words.length] = c, c = ""), h = !1) : c += d.charAt(a) : '"' == d.charAt(a) ? ("" != c && (words[words.length] = c, c = ""), h = !0) : " " == d.charAt(a) ? "" != c && (words[words.length] = c, c = "") : c += d.charAt(a);
+	"" != c && (words[words.length] = c, c = ""),
+		$i("Result").options.length = 0;
+	var f = 1,
+		g = new Array;
+	for (a = 0; a < words.length; a++) g[a] = new RegExp(words[a], "gi");
+	for (a = 0, e.length = 0, j = contents.length / 3; a <= j - 1; a++) e[a] = a;
+	for (a = 0, rank.length = 0; a <= e.length - 1; a++) {
+		for (b = 0, d = contents[3 * e[a] + 1], f = 1; b < g.length; b++) null != (r = d.match(g[b])) && (f *= r.length + 1);
+		f > 1 && i(e[a], Math.round(20 * Math.pow(f, 1 / g.length)))
+	}
+	for (a = 0; a <= e.length - 1; a++) {
+		for (b = 0, d = contents[3 * e[a]], f = 1; b < g.length; b++) null != (r = d.match(g[b])) && (f *= r.length + 1);
+		f > 1 && i(e[a], Math.round(Math.pow(f, 1 / g.length)))
+	}
+	if (rank.length > 0) {
+		var k = new Array;
+		for (a = 0; a <= rank.length - 2; a++)
+			for (b = 0; b <= rank.length - 2 - a; b++) rank[b][1] < rank[b + 1][1] && (k = rank[b], rank[b] = rank[b + 1], rank[b + 1] = k);
+		for (a = 0; a <= rank.length - 1; a++) {
+			var m = rank[a][1] - 1,
+				l = contents[3 * rank[a][0] + 1];
+			$i("Result").options[$i("Result").options.length] = new Option(l + " [" + m + "]", l),
+				0 == a && ($i("Result").selectedIndex = 0)
+		}
+		$i("Result").classList.remove("noResult")
+	}else{
+		$i("Result").classList.add("noResult")
+	}
+}
+function openLink() {
+	var a, b = "";
+	for (a = 0; a < $i("Result").options.length; a++)
+		if ($i("Result").options[a].selected) {
+			b = $i("Result").options[a].value;
+			break
+		}
+	aTag_innerH.includes(b) && window.open(b + ".html", "left");
+	
+	window.setTimeout(function() {
+			top.postMessage($i("keyword").value, "*")
+		},
+		1000
+	)
+}
+
+
+/*------------------------------+
+	input回车键响应
+-------------------------------*/
+function oo(e) {
+	var evt = window.event || e;
+	if (evt.keyCode == 13) {
+		$i("sel").style.display = "none";
+		srh2()
+	}
+}
+
+
+/*------------------------------+
+	时间数字串
+-------------------------------*/
+function getTimeStamp() {
+	var now = new Date();
+	return (now.getFullYear()) + '/' +
+		(now.getMonth() + 1 + '/' +
+			now.getDate() + " " +
+			now.getHours() + ':' +
+			((now.getMinutes() < 10) ? ("0" + now.getMinutes()) : (now.getMinutes())) + ':' +
+			((now.getSeconds() < 10) ? ("0" + now.getSeconds()) : (now.getSeconds())));
+}
+
+
+/*------------------------------+
+	Cookie
+-------------------------------*/
+function setCookie(cname, cvalue, exdays) {
+	var d = new Date();
+	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+	var expires = "expires=" + d.toGMTString();
+	document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+function getCookie(cname) {
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i].trim();
+		if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+	}
+	return "";
+}
+function delCookie(cname) {
+	setCookie(cname, "", -1);
+}
+
+
+/*------------------------------+
+	options排序
+-------------------------------*/
+function sort(id) {
+	var s = $i(id);
+	if (!s) return;
+	var t1 = [],
+		t2 = [],
+		tt = s.options;
+	while (tt.length > 0) {
+		t1[t1.length] = tt[0].text;
+		t2[t2.length] = tt[0].value;
+		tt.remove(0);
+	}
+	t1.reverse();
+	t2.reverse();
+	for (var i = 0,
+			c1, c2; c1 = t1[i], c2 = t2[i]; i++) {
+		tt.add(new Option(c1, c2));
+	}
+}
+
+
+/*------------------------------+
+	option刷新
+-------------------------------*/
+function srh() {
+	$i("sel").options.length = 0;
+	var aCookie = document.cookie.split(";");
+	for (var i = 0; i < aCookie.length; i++) {
+		var aCrumb = aCookie[i].split("=");
+		if (aCrumb[0].toString().trim() != "x") {//else if(aCrumb[0].toString().trim().startsWith("📖"))
+			var opt = document.createElement('option');
+			opt.text = aCrumb[1].toString().trim();
+			opt.value = i;
+			$i("sel").add(opt, undefined);
+		}
+	}
+	sort("sel");
+}
+
+
+/*------------------------------+
+	option置顶
+-------------------------------*/
+function srh2() {
+	$i("match").click();
+	$i("sel").options.length = 0;
+	var aCookie = document.cookie.split(";");
+	for (var i = 0; i < aCookie.length; i++) {
+		var aCrumb = aCookie[i].split("=");
+		var kw = $i("keyword").value.toString().trim();
+		if (aCrumb[1].toString().trim() == kw) {
+			delCookie(aCrumb[0]);
+			setCookie("🔎  "+getTimeStamp(), $i("keyword").value, 30);
+		} else if (aCrumb[0].toString().trim() != "x") {
+			var opt = document.createElement('option');
+			opt.text = aCrumb[1].toString().trim();
+			opt.value = i;
+		}
+		$i("sel").add(opt, undefined);
+	}
+	sort("sel");
+}
+
+
+/*------------------------------+
+	排除重复值空值
+-------------------------------*/
+function xx() {
+	var cArr = document.cookie.split(";");
+	var flag = 1;
+	var kw = $i("keyword").value.toString().trim();
+	for (var i = 0; i < cArr.length; i++) {
+		var x = cArr[i].split("=");
+		if (kw == x[1].toString().trim() || kw == "") {
+			flag = flag * 0;
+		} else {
+			flag = flag * 1;
+		}
+	};
+	if (flag != 0) {
+		setCookie("🔎  "+getTimeStamp(), $i("keyword").value, 30);
+	};
+	srh();
+}
+
+
+/*------------------------------+
+	数组
+-------------------------------*/
+function downloadJSAtOnload() {
+	var a = document.createElement("script");
+	a.src = "../js/data.js",
+		document.body.appendChild(a)
+}
+window.addEventListener ? window.addEventListener("load", downloadJSAtOnload, !1) : window.attachEvent ? window.attachEvent("onload", downloadJSAtOnload) : window.onload = downloadJSAtOnload
+</script>
+  
+</html>

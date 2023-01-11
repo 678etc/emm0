@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Gmail简化视图</title>
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <script src="../js/default.js" type="text/javascript"></script>
+  </head>
+  <body><span id="time-stamp">20221203233426</span>
+ 	<pre>
+<img src="../src/20221123113344.webp">
+https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld
+https://mail.google.com/
+将https://mail.google.com/?ui=html作为链接入口
+<p class="code">/* 上古图标 */
+document.getElementsByTagName(&quot;img&quot;)[0].src = &quot;https://www.emm0.com/src/pic_chain/gmail_logo1.png&quot;;
+document.getElementsByClassName(&quot;ft&quot;)[0].getElementsByTagName(&quot;tr&quot;)[0].style.display = &quot;none&quot;;
+document.getElementById(&quot;gbar&quot;).style.display = &quot;none&quot;;
+document.getElementsByClassName(&quot;l&quot;)[0].setAttribute(&#39;style&#39;, &#39;opacity:0&#39;);
+
+ftitle = &#39;&#39;;
+step = 0;
+function flash_title() {
+	step++;
+	if (step == 3) {
+		step = 1
+	};
+	if (step == 1) {
+		document.title = ftitle;
+		bb()
+	};
+	if (step == 2) {
+		document.title = &quot;\u200E&quot;;
+		aa()
+	};
+	setTimeout(&quot;flash_title()&quot;, 500);
+}
+function aa() {
+	var xx = &quot;https://www.emm0.com/src/pic_chain/gmail_logo3.ico&quot;;
+	var link = document.querySelector(&quot;link[rel*=&#39;icon&#39;]&quot;) || document.createElement(&#39;link&#39;);
+	link.type = &#39;image/x-icon&#39;;
+	link.rel = &#39;shortcut icon&#39;;
+	link.href = xx;
+	document.getElementsByTagName(&#39;head&#39;)[0].appendChild(link);
+}
+function bb() {
+	var xx = &quot;https://www.emm0.com/src/pic_chain/gmail_logo2.webp&quot;;
+	var link = document.querySelector(&quot;link[rel*=&#39;icon&#39;]&quot;) || document.createElement(&#39;link&#39;);
+	link.type = &#39;image/x-icon&#39;;
+	link.rel = &#39;shortcut icon&#39;;
+	link.href = xx;
+	document.getElementsByTagName(&#39;head&#39;)[0].appendChild(link);
+}
+function getX(e) {
+	var actualLeft = e.offsetLeft;
+	var current = e.offsetParent;
+	while (current !== null) {
+		actualLeft += current.offsetLeft;
+		current = current.offsetParent;
+	}
+	return actualLeft
+}
+function getY(e) {
+	var actualTop = e.offsetTop;
+	var current = e.offsetParent;
+	while (current !== null) {
+		actualTop += (current.offsetTop + current.clientTop);
+		current = current.offsetParent;
+	}
+	return actualTop
+}
+
+window.onload = function() {
+	if (document.getElementsByClassName(&quot;la-i&quot;).length == 0) { //非标准视图
+		/* 标签页显示未读件数 */
+		var aTag = document.querySelectorAll(&quot;a&quot;);
+		for (i = 0; i &lt; aTag.length; i++) {
+			if (aTag[i].accessKey == &quot;i&quot;) {
+				if (aTag[i].innerHTML.match(/\d/g)) {
+					ftitle = aTag[i].innerHTML.replace(/&amp;nbsp;/, &quot; &quot;);
+					flash_title()
+				} else {
+					document.title = aTag[i].innerHTML.replace(/&amp;nbsp;/, &quot; &quot;);
+					bb();
+				}
+			}
+		};
+		
+		/* 周期刷新 */
+		setInterval(function() {
+			if (document.getElementsByName(&quot;nvp_bu_send&quot;).length == 0 &amp;&amp; document.getElementsByClassName(&quot;prf&quot;).length == 0 &amp;&amp; document.querySelectorAll(&#39;input[name=&quot;t&quot;]:checked&#39;).length == 0) {
+				window.location.reload();
+			}
+		}, 120000);
+		
+		/* 按钮标签 */
+		ele = document.createElement(&quot;span&quot;);
+		ele.innerHTML = &quot;&lt;button id=&#39;ca&#39;&gt;全选&lt;/button&gt;&lt;button id=&#39;uc&#39;&gt;取消全选&lt;/button&gt;&lt;button id=&#39;rc&#39;&gt;反选&lt;/button&gt;&lt;button id=&#39;nt&#39;&gt;不含标签&lt;/button&gt;&quot;;
+		document.getElementsByName(&quot;nvp_site_mail&quot;)[0].parentNode.insertBefore(ele, document.getElementsByName(&quot;nvp_site_mail&quot;)[0].nextSibling);
+		var a = document.getElementsByName(&quot;nvp_a_arch&quot;)[0];
+		var b = document.getElementsByName(&quot;nvp_a_tr&quot;)[0];
+		var c = document.getElementsByName(&quot;nvp_a_sp&quot;)[0];
+		var d = document.getElementsByName(&quot;nvp_bu_rs&quot;)[0];
+		var e = document.getElementsByName(&quot;nvp_a_dd&quot;)[0];
+		var f = document.getElementsByName(&quot;nvp_a_ib&quot;)[0];
+		var g = document.getElementsByName(&quot;nvp_a_dl&quot;)[0];
+		var h = document.getElementsByName(&quot;nvp_a_us&quot;)[0];
+		var i = document.getElementsByName(&quot;nvp_bu_rl&quot;)[0];
+		var x = document.getElementById(&quot;nt&quot;);
+		var y = document.getElementsByName(&quot;nvp_site_mail&quot;)[0];
+		if (a != null &amp;&amp; b != null &amp;&amp; c != null) {
+			a.style.position = &quot;absolute&quot;;
+			a.style.top = getY(y);
+			a.style.left = getX(x) + x.clientWidth + 3;
+			b.style.position = &quot;absolute&quot;;
+			b.style.top = getY(y);
+			b.style.left = getX(x) + x.clientWidth + a.clientWidth + 7;
+			c.style.position = &quot;absolute&quot;;
+			c.style.top = getY(y);
+			c.style.left = getX(x) + x.clientWidth + a.clientWidth + b.clientWidth + 11;
+			x.style.marginRight = a.clientWidth + b.clientWidth + c.clientWidth + 8;
+			a.style.color = &quot;rgb(0, 102, 51)&quot;;
+			b.style.color = &quot;red&quot;;
+		} else if (c != null &amp;&amp; d != null) {
+			c.style.position = &quot;absolute&quot;;
+			c.style.top = getY(y);
+			c.style.left = getX(x) + x.clientWidth + 3;
+			d.style.position = &quot;absolute&quot;;
+			d.style.top = getY(y);
+			d.style.left = getX(x) + x.clientWidth + c.clientWidth + 7;
+			x.style.marginRight = c.clientWidth + d.clientWidth + 4;
+		} else if (e != null) {
+			e.style.position = &quot;absolute&quot;;
+			e.style.top = getY(y);
+			e.style.left = getX(x) + x.clientWidth + 3;
+			x.style.marginRight = e.clientWidth;
+			e.style.color = &quot;red&quot;;
+		} else if (f != null &amp;&amp; b != null &amp;&amp; c != null) {
+			f.style.position = &quot;absolute&quot;;
+			f.style.top = getY(y);
+			f.style.left = getX(x) + x.clientWidth + 3;
+			b.style.position = &quot;absolute&quot;;
+			b.style.top = getY(y);
+			b.style.left = getX(x) + x.clientWidth + f.clientWidth + 7;
+			c.style.position = &quot;absolute&quot;;
+			c.style.top = getY(y);
+			c.style.left = getX(x) + x.clientWidth + f.clientWidth + b.clientWidth + 11;
+			x.style.marginRight = f.clientWidth + b.clientWidth + c.clientWidth + 8;
+			b.style.color = &quot;red&quot;;
+		} else if (g != null &amp;&amp; h != null) {
+			g.style.position = &quot;absolute&quot;;
+			g.style.top = getY(y);
+			g.style.left = getX(x) + x.clientWidth + 3;
+			h.style.position = &quot;absolute&quot;;
+			h.style.top = getY(y);
+			h.style.left = getX(x) + x.clientWidth + g.clientWidth + 7;
+			x.style.marginRight = g.clientWidth + h.clientWidth + 4;
+			g.style.color = &quot;red&quot;;
+		} else if (f != null &amp;&amp; g != null) {
+			f.style.position = &quot;absolute&quot;;
+			f.style.top = getY(y);
+			f.style.left = getX(x) + x.clientWidth + 3;
+			g.style.position = &quot;absolute&quot;;
+			g.style.top = getY(y);
+			g.style.left = getX(x) + x.clientWidth + f.clientWidth + 7;
+			x.style.marginRight = f.clientWidth + g.clientWidth + 4;
+			g.style.color = &quot;red&quot;;
+		} else if (i != null &amp;&amp; b != null &amp;&amp; c != null) {
+			i.style.position = &quot;absolute&quot;;
+			i.style.top = getY(y);
+			i.style.left = getX(x) + x.clientWidth + 3;
+			b.style.position = &quot;absolute&quot;;
+			b.style.top = getY(y);
+			b.style.left = getX(x) + x.clientWidth + i.clientWidth + 7;
+			c.style.position = &quot;absolute&quot;;
+			c.style.top = getY(y);
+			c.style.left = getX(x) + x.clientWidth + i.clientWidth + b.clientWidth + 11;
+			x.style.marginRight = i.clientWidth + b.clientWidth + c.clientWidth + 8;
+			b.style.color = &quot;red&quot;;
+		};
+		var m = document.getElementsByClassName(&quot;lb&quot;)[0].getElementsByTagName(&quot;font&quot;)[0];
+		m.style.position=&quot;absolute&quot;;
+		m.style.top=&quot;4px&quot;;
+		m.style.left=&quot;130px&quot;;
+		var n = document.getElementsByClassName(&quot;lb&quot;)[0].getElementsByTagName(&quot;a&quot;);
+		n[0].style.position=&quot;absolute&quot;;
+		n[0].style.top=&quot;4px&quot;;
+		n[0].style.left=&quot;170px&quot;;
+		for(i=1; i&lt;n.length;i++){
+			n[i].style.position=&quot;absolute&quot;;
+			n[i].style.top=&quot;4px&quot;;
+			n[i].style.left = n[i-1].clientWidth+getX(n[i-1])+14;
+		};
+		document.getElementsByClassName(&quot;l&quot;)[0].setAttribute(&#39;style&#39;, &#39;opacity:1 !important&#39;);
+		document.getElementById(&quot;ca&quot;).onclick = function() {
+			var x = document.getElementsByName(&quot;t&quot;);
+			for (var i = 0; i &lt; x.length; i++) {
+				x[i].checked = true
+			}
+		}
+		document.getElementById(&quot;uc&quot;).onclick = function() {
+			var x = document.getElementsByName(&quot;t&quot;);
+			for (var i = 0; i &lt; x.length; i++) {
+				x[i].checked = false
+			}
+		}
+		document.getElementById(&quot;rc&quot;).onclick = function() {
+			var x = document.getElementsByName(&quot;t&quot;);
+			for (var i = 0; i &lt; x.length; i++) {
+				if (x[i].checked == false) {
+					x[i].checked = true
+				} else {
+					x[i].checked = false
+				}
+			}
+		}
+		document.getElementById(&quot;nt&quot;).onclick = function() {
+			document.querySelectorAll(&#39;[name=&quot;t&quot;]&#39;).forEach(function(e) {
+				var f = e.parentElement.nextElementSibling.nextElementSibling.getElementsByTagName(&quot;font&quot;)[1].innerHTML;
+				if (f == &quot;&quot;) {
+					e.checked = true
+				} else if (f != &quot;&quot;) {
+					e.checked = false
+				}
+			});
+		};
+	}
+};</p>
+<p class="code">.lb a {
+    line-height: 1.8;
+}</p>
+	</pre>
+
+  </body>
+</html>
